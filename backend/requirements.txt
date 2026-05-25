@@ -1,0 +1,29 @@
+# core
+langgraph
+langchain
+langchain-openai
+fastapi
+uvicorn[standard]
+
+# content management
+redis
+sqlalchemy[asyncio]
+asyncpg
+
+# infrastructure
+apscheduler
+arq
+
+# tools
+httpx
+
+# utils
+pydantic
+pydantic-settings
+python-dotenv
+loguru
+
+# dev
+pytest
+pytest-asyncio
+ruff
