@@ -112,4 +112,7 @@ python -m tests.test_redis
 
 # 定时任务调度测试
 python -m tests.test_scheduler
+
+# 异步队列测试
+python -m tests.test_queue
 ```
