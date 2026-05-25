@@ -109,4 +109,7 @@ python -m tests.test_logger
 
 # Redis 连接池测试
 python -m tests.test_redis
+
+# 定时任务调度测试
+python -m tests.test_scheduler
 ```
