@@ -8,7 +8,7 @@ uvicorn[standard]
 # content management
 redis
 sqlalchemy[asyncio]
-aiosqlite
+asyncpg
 
 # infrastructure
 apscheduler

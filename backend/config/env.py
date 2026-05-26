@@ -33,11 +33,23 @@ class Settings(BaseSettings):
     OPENAI_BASE_URL: str = "https://api.openai.com/v1"
     OPENAI_MODEL: str = "gpt-4o"
 
-    # --- 数据库配置 ---
-    # 默认使用 SQLite，后续可切换为 PostgreSQL
-    # SQLite: sqlite+aiosqlite:///./data/agent.db
-    # PostgreSQL: postgresql+asyncpg://user:pass@host:port/db
-    DATABASE_URL: str = "sqlite+aiosqlite:///./data/agent.db"
+    # --- PostgreSQL 数据库配置 ---
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 50002
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = ""
+    POSTGRES_DB: str = "agent"
+
+    @property
+    def DATABASE_URL(self) -> str:
+        """
+        拼接 PostgreSQL 异步连接串
+        使用 asyncpg 驱动，格式: postgresql+asyncpg://user:pass@host:port/db
+        """
+        return (
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
 
     # --- Redis 配置 ---
     REDIS_HOST: str = "localhost"

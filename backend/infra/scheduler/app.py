@@ -13,9 +13,10 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config import logger
 from config.env import settings
-from infra.scheduler.jobs import example_job, get_job_func
+from infra.database import get_session, init_db
+from infra.scheduler.jobs import get_job_func
 from infra.scheduler.manager import set_scheduler
-from infra.scheduler.models import SchedulerTask, init_db, get_session
+from infra.scheduler.models import SchedulerTask
 
 # ============================================================
 # 全局调度器实例

@@ -15,6 +15,7 @@ from fastapi import FastAPI
 
 from config import logger
 from config.env import settings
+from infra.database import close_db, init_db
 from infra.redis import close_pool, init_pool
 
 
@@ -33,16 +34,19 @@ async def lifespan(app: FastAPI):
 
     被管理的资源:
     - Redis 连接池（startup 初始化，shutdown 关闭）
+    - PostgreSQL 数据库引擎（startup 初始化，shutdown 关闭）
     """
     # ---- startup ----
     logger.info("服务启动中...")
     init_pool()
+    await init_db()
     logger.info("服务启动完成")
 
     yield  # 应用运行期间
 
     # ---- shutdown ----
     logger.info("服务关闭中...")
+    await close_db()
     await close_pool()
     logger.info("服务已关闭")
 

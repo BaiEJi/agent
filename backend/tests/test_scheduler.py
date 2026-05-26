@@ -24,9 +24,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import logger
+from infra.database import init_db, engine, close_db
 from infra.scheduler.app import close_scheduler, init_scheduler, get_scheduler
 from infra.scheduler.manager import add_task, list_tasks, remove_task, toggle_task
-from infra.scheduler.models import init_db, engine
 
 
 async def test_scheduler():
@@ -183,6 +183,13 @@ async def test_scheduler():
     async with engine.begin() as conn:
         await conn.execute(text("DELETE FROM scheduler_tasks"))
     logger.info("✅ 测试数据清理完成")
+
+    # ============================================================
+    # 测试 10: 关闭数据库引擎
+    # ============================================================
+    logger.info("=== 测试 10: 关闭数据库引擎 ===")
+    await close_db()
+    logger.info("✅ 数据库引擎已关闭")
 
     print("\n✅ 所有定时任务调度测试通过")
 
