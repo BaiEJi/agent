@@ -56,7 +56,7 @@ def init_pool() -> Redis:
     _pool = ConnectionPool(
         host=settings.REDIS_HOST,
         port=settings.REDIS_PORT,
-        password=settings.REDIS_PASSWORD or None,
+        password=settings.REDIS_PASSWORD,
         db=settings.REDIS_DB,
         max_connections=50,
         # 以下参数通过 connection_kwargs 传给 Connection 类

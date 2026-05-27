@@ -4,8 +4,8 @@
 使用 pydantic BaseSettings 管理所有环境变量。
 - 自动读取 .env 文件
 - 自动做类型校验
-- 支持默认值
-- 支持嵌套配置
+- 所有字段必须在 .env 中显式声明，缺少即报错
+- 不设置默认值，确保配置透明可控
 
 使用方式:
     from config.env import settings
@@ -26,19 +26,21 @@ class Settings(BaseSettings):
     1. 从 .env 文件读取
     2. 从系统环境变量读取（优先级更高）
     3. 做类型校验，缺少必填字段或类型不匹配时直接报错
+
+    注意：所有字段不设置默认值，必须在 .env 中显式声明。
     """
 
     # --- OpenAI API 配置 ---
-    OPENAI_API_KEY: str = ""
-    OPENAI_BASE_URL: str = "https://api.openai.com/v1"
-    OPENAI_MODEL: str = "gpt-4o"
+    OPENAI_API_KEY: str
+    OPENAI_BASE_URL: str
+    OPENAI_MODEL: str
 
     # --- PostgreSQL 数据库配置 ---
-    POSTGRES_HOST: str = "localhost"
-    POSTGRES_PORT: int = 50002
-    POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = "agent"
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
 
     @property
     def DATABASE_URL(self) -> str:
@@ -52,22 +54,20 @@ class Settings(BaseSettings):
         )
 
     # --- Redis 配置 ---
-    REDIS_HOST: str = "localhost"
-    REDIS_PORT: int = 6379
-    REDIS_PASSWORD: str = ""
-    REDIS_DB: int = 0
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_PASSWORD: str
+    REDIS_DB: int
 
     @property
     def REDIS_URL(self) -> str:
         """拼接 Redis 连接串，格式: redis://:password@host:port/db"""
-        if self.REDIS_PASSWORD:
-            return f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
-        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+        return f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
 
     # --- 服务配置 ---
-    APP_HOST: str = "0.0.0.0"
-    APP_PORT: int = 8000
-    APP_ENV: str = "development"
+    APP_HOST: str
+    APP_PORT: int
+    APP_ENV: str
 
     @property
     def is_production(self) -> bool:
@@ -75,9 +75,9 @@ class Settings(BaseSettings):
         return self.APP_ENV == "production"
 
     # --- 日志配置 ---
-    LOG_LEVEL: str = "DEBUG"
-    LOG_ROTATION: str = "10 MB"
-    LOG_RETENTION: str = "7 days"
+    LOG_LEVEL: str
+    LOG_ROTATION: str
+    LOG_RETENTION: str
 
     # --- pydantic Settings 配置 ---
     # env_file: 指定 .env 文件路径
