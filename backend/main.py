@@ -17,6 +17,7 @@ from config import logger
 from config.env import settings
 from infra.database import close_db, init_db
 from infra.redis import close_pool, init_pool
+from api.chat import router as chat_router
 
 
 # ============================================================
@@ -61,6 +62,12 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+# ============================================================
+# 挂载 API 路由
+# 所有接口统一挂在 /api/v1 前缀下
+# ============================================================
+app.include_router(chat_router, prefix="/api/v1", tags=["chat"])
 
 
 @app.get("/health")
